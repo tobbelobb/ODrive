@@ -10,6 +10,7 @@
 #include <spi.h>
 #include <tim.h>
 #include <main.h>
+#include <custom_pin_assignments.h>
 
 #if HW_VERSION_MAJOR == 3
 #if HW_VERSION_MINOR <= 3
@@ -74,10 +75,17 @@ const size_t thermistor_num_coeffs = sizeof(thermistor_poly_coeffs)/sizeof(therm
 const BoardHardwareConfig_t hw_configs[2] = { {
     //M0
     .axis_config = {
+#ifdef MOVE_M0_STEP_DIR_TO_3_4
+        .step_port = GPIO_3_GPIO_Port,
+        .step_pin = GPIO_3_Pin,
+        .dir_port = GPIO_4_GPIO_Port,
+        .dir_pin = GPIO_4_Pin,
+#else
         .step_port = GPIO_1_GPIO_Port,
         .step_pin = GPIO_1_Pin,
         .dir_port = GPIO_2_GPIO_Port,
         .dir_pin = GPIO_2_Pin,
+#endif
         .thermistor_adc_ch = 15,
         .thread_priority = (osPriority)(osPriorityHigh + (osPriority)1),
     },

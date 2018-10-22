@@ -171,15 +171,17 @@ int odrive_main(void) {
         axes[i] = new Axis(hw_configs[i].axis_config, axis_configs[i],
                 *encoder, *sensorless_estimator, *controller, *motor, *trap);
     }
-    
+
     // Start ADC for temperature measurements and user measurements
     start_general_purpose_adc();
 
     // TODO: make dynamically reconfigurable
 #if HW_VERSION_MAJOR == 3 && HW_VERSION_MINOR >= 3
     if (board_config.enable_uart) {
+#ifndef MOVE_M0_STEP_DIR_TO_3_4
         axes[0]->config_.enable_step_dir = false;
         axes[0]->set_step_dir_enabled(false);
+#endif
         SetGPIO12toUART();
     }
 #endif
